@@ -4,12 +4,12 @@
   "version": "1.0.0",
   "description": "Node.js on Docker",
   "author": "First Last <first.last@example.com>",
-  "main": "out/server.js",
+  "main": "out/start.js",
   "scripts": {
     "compile": "tsc -p tsconfig.json",
     "dev": "nodemon -L -e ts --exec \"npm run build && npm start\"",
     "build": "tsc",
-    "start": "node out/server.js",
+    "start": "node out/start.js",
     "test": " REGRESSION_TESTING=true npm start"
   },
   "dependencies": {
