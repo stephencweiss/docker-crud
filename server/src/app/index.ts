@@ -1,8 +1,11 @@
 import * as express from "express";
+import { loadEnv } from "../utils/loadEnv";
 // import { createSession } from "./session";
 // import { addCors } from "./cors";
 import { listen } from "./listen";
 import { server } from "./server";
+
+loadEnv();
 
 export const createApp = () => {
   const app = express();

@@ -1,10 +1,8 @@
-import { connectDb } from "./connectDb";
+import { attemptConnect } from "./db/db";
 import { createApp } from "./app/";
-import { loadEnv } from "./loadEnv";
 
 export const start = async () => {
-  loadEnv();
-  connectDb();
+  attemptConnect();
   createApp();
 };
 start()

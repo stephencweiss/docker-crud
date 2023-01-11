@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: ../server
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace:cached
+    networks:
+      - docker_net
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+    environment:
+      # DATABASE_URL: postgres://user:pass@postgres:5432/db
+      POSTGRES_HOST: postgres # matches the postgres service
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_PORT: 5432
+      NODE_ENV: development
+      PORT: 3000
+    command: ["node", "dist/start.js"]
+  postgres:
+    image: postgres:latest
+    networks:
+      - docker_net
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: docker_crud
+    env_file:
+      - ../server/.env.development
+    ports:
+      - 5432:5432
+networks:
+  docker_net:
+    name: docker_net
+
+volumes:
+  postgres-data:

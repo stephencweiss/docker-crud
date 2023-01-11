@@ -9,7 +9,7 @@
     "compile": "tsc -p tsconfig.json",
     "dev": "nodemon -L -e ts --exec \"npm run build && npm start\"",
     "build": "tsc",
-    "start": "node out/start.js",
+    "start": "NODE_PATH=./out node out/start.js",
     "test": " REGRESSION_TESTING=true npm start"
   },
   "dependencies": {

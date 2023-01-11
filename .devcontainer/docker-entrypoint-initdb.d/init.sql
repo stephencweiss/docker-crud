@@ -1,0 +1,3 @@
+CREATE USER docker;
+	CREATE DATABASE docker_crud;
+	GRANT ALL PRIVILEGES ON DATABASE docker_crud TO docker;

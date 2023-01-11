@@ -13,11 +13,10 @@ COPY . .
 RUN npm run build
 
 # stage 2
-ARG VARIANT="18-bullseye"
-FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:0-${VARIANT}
+FROM builder as production
 WORKDIR /usr/app
 COPY package*.json ./
-RUN npm install --production
+RUN npm install
 
 COPY --from=builder /usr/app/out ./dist
 
@@ -25,4 +24,4 @@ COPY --from=builder /usr/app/out ./dist
 # COPY .env .
 
 EXPOSE 3000
-CMD node dist/start.js
+# CMD node dist/start.js
