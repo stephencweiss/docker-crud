@@ -16,7 +16,7 @@ export const server = (
   app: Express,
 ): Express => {
   app.get('/', (req: any, res: any) => {
-    res.send('Hello sexy world!\n');
+    res.send('Hello world!\n');
   });
   return app;
 };
