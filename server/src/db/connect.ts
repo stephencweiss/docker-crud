@@ -4,7 +4,7 @@ import { loadEnv } from '../utils/loadEnv';
 loadEnv();
 
 const config: ClientConfig = {
-  database: process.env.POSTGRES_NAME,
+  database: process.env.POSTGRES_DB,
   host: process.env.POSTGRES_HOST,
   user: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
