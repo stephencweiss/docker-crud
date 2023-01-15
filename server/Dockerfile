@@ -1,27 +1,17 @@
 # stage 1 - Compile
 ARG VARIANT="18-bullseye"
-FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:0-${VARIANT} as builder
-
+FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:0-${VARIANT} as base
 WORKDIR /usr/app
-# Copy the dependencies
+# copy the dependencies
 COPY package*.json ./
+# copy ts config
+COPY tsconfig*.json ./
 # install the dependencies
 RUN npm install
 # copy the source code
 COPY . .
-# compile the code
+
+
+
+FROM base as prod
 RUN npm run build
-
-# stage 2
-FROM builder as production
-WORKDIR /usr/app
-COPY package*.json ./
-RUN npm install
-
-COPY --from=builder /usr/app/out ./dist
-
-# COPY ormconfig.docker.json ./ormconfig.json
-# COPY .env .
-
-EXPOSE 3000
-# CMD node dist/start.js

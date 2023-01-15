@@ -5,23 +5,31 @@ services:
     build:
       context: ../server
       dockerfile: Dockerfile
+      target: base
+      args:
+        - PORT=${PORT}
+    ports:
+      - 3000:${PORT}
     volumes:
       - ..:/workspace:cached
+      # - .:/usr/app/
     networks:
       - docker_net
-    ports:
-      - 3000:3000
     depends_on:
       - postgres
+    # env_file:
+    #   - ../server/.env.development
     environment:
+      # TODO: Figure out how to migrate these to an .env file
       # DATABASE_URL: postgres://user:pass@postgres:5432/db
+      POSTGRES_NAME: docker_crud
       POSTGRES_HOST: postgres # matches the postgres service
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_PORT: 5432
       NODE_ENV: development
       PORT: 3000
-    command: ["node", "dist/start.js"]
+    command: npm run watch
   postgres:
     image: postgres:latest
     networks:
@@ -38,9 +46,20 @@ services:
       - ../server/.env.development
     ports:
       - 5432:5432
+  pg-admin:
+    image: dpage/pgadmin4:6
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@email.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=5050
+    ports:
+      - "5050:5050"
+    volumes:
+      - pg-admin-data:/var/lib/pgadmin
 networks:
   docker_net:
     name: docker_net
 
 volumes:
   postgres-data:
+  pg-admin-data:
