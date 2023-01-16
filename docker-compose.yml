@@ -3,35 +3,24 @@ version: "3.8"
 services:
   app:
     build:
-      context: ../server
-      dockerfile: Dockerfile
-      target: base
+      context: ./server/
+      dockerfile: ./Dockerfile
       args:
-        - PORT=$${PORT}
+        - PORT=3000
     ports:
-      - 3000:3002
+      - 3000:3000
     volumes:
-      - ..:/workspace:cached
-      # - .:/usr/app
+      - ./server:/usr/app
     networks:
       - docker_net
     depends_on:
       - postgres
-    # env_file:
-    #   - ../server/.env.development
-    environment:
-      # TODO: Figure out how to migrate these to an .env file
-      # DATABASE_URL: postgres://user:pass@postgres:5432/db
-      POSTGRES_NAME: docker_crud
-      POSTGRES_HOST: postgres # matches the postgres service
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
-      POSTGRES_PORT: 5432
-      NODE_ENV: development
-      PORT: 3002
-    command: npm run watch
+    env_file:
+      - ./server/.env.development
+    entrypoint: /usr/app/entrypoint.sh
   postgres:
     image: postgres:latest
+    hostname: postgres # you can use postgres.docker_net as the hostname internally
     networks:
       - docker_net
     restart: unless-stopped
@@ -43,7 +32,7 @@ services:
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: docker_crud
     env_file:
-      - ../server/.env.development
+      - ./server/.env.development
     ports:
       - 5432:5432
   pg-admin:
@@ -52,6 +41,8 @@ services:
       - PGADMIN_DEFAULT_EMAIL=admin@email.com
       - PGADMIN_DEFAULT_PASSWORD=admin
       - PGADMIN_LISTEN_PORT=5050
+    networks:
+      - docker_net
     ports:
       - "5050:5050"
     volumes:
@@ -59,7 +50,6 @@ services:
 networks:
   docker_net:
     name: docker_net
-
 volumes:
   postgres-data:
   pg-admin-data:
