@@ -17,7 +17,7 @@ services:
       - postgres
     env_file:
       - ./server/.env.development
-    entrypoint: /usr/app/entrypoint.sh
+    command: npm run watch
   postgres:
     image: postgres:latest
     hostname: postgres # you can use postgres.docker_net as the hostname internally
