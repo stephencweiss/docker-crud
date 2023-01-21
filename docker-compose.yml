@@ -16,8 +16,8 @@ services:
     depends_on:
       - postgres
     env_file:
-      - ./server/.env.development
-    command: npm run watch
+      - ./.env.development
+    entrypoint: /usr/app/entrypoint-dev.sh
   postgres:
     image: postgres:latest
     hostname: postgres # you can use postgres.docker_net as the hostname internally
@@ -26,13 +26,13 @@ services:
     restart: unless-stopped
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./.devcontainer/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: docker_crud
     env_file:
-      - ./server/.env.development
+      - ./.env.development
     ports:
       - 5432:5432
   pg-admin:
@@ -47,6 +47,7 @@ services:
       - "5050:5050"
     volumes:
       - pg-admin-data:/var/lib/pgadmin
+
 networks:
   docker_net:
     name: docker_net
