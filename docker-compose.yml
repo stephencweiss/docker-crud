@@ -1,6 +1,19 @@
 version: "3.8"
 
 services:
+  next:
+    build:
+      context: ./app/
+      dockerfile: ./Dockerfile
+    ports:
+      - 3002:3002
+    volumes:
+      - ./app:/usr/next
+    networks:
+      - docker_net
+    depends_on:
+      - postgres
+    entrypoint: /usr/next/entrypoint-dev.sh
   app:
     build:
       context: ./server/
