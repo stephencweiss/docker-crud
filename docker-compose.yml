@@ -7,6 +7,8 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - 3002:3002
+      # 5555 is for Prisma Studio
+      - 5555:5555
     volumes:
       - ./app:/usr/next
     networks:
@@ -14,26 +16,10 @@ services:
     depends_on:
       - postgres
     entrypoint: /usr/next/entrypoint-dev.sh
-  app:
-    build:
-      context: ./server/
-      dockerfile: ./Dockerfile
-      args:
-        - PORT=3000
-    ports:
-      - 3000:3000
-    volumes:
-      - ./server:/usr/app
-    networks:
-      - docker_net
-    depends_on:
-      - postgres
-    env_file:
-      - ./.env.development
-    entrypoint: /usr/app/entrypoint-dev.sh
   postgres:
     image: postgres:latest
-    hostname: postgres # you can use postgres.docker_net as the hostname internally
+    # you can use postgres.docker_net as the hostname internally
+    hostname: postgres
     networks:
       - docker_net
     restart: unless-stopped
