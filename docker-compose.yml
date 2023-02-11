@@ -31,7 +31,7 @@ services:
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: docker_crud
     env_file:
-      - ./.env.development
+      - ./app/.env
     ports:
       - 5432:5432
   pg-admin:

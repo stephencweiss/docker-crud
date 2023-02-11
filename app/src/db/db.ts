@@ -4,6 +4,9 @@ import { createConnection } from "./connect";
  * The function will attempt to make a connection with a sleep between each attempt.
  * This is because when booted together, e.g., via docker, the database may not be ready
  * for a connection immediately.
+ *
+ * When dictating in the docker-compose that the app depends_on postgres, however, this
+ * should not be an issue.
  */
 export const attemptConnect = async (retries = 5): Promise<void> => {
   while (retries) {
