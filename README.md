@@ -16,4 +16,4 @@ Or, use a VS Code Dev container by selecting the `Dev Containers: Reopen in Cont
 
 ## Use the App
 
-Once running, the express server is available on port `3000` while the NextJS app is on port `3002`.
+Once running, the NextJS app is available on port `3000`.
