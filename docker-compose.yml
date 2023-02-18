@@ -1,26 +1,23 @@
 version: "3.8"
 
 services:
-  app:
+  next:
     build:
-      context: ./server/
+      context: ./app/
       dockerfile: ./Dockerfile
-      args:
-        - PORT=3000
     ports:
       - 3000:3000
     volumes:
-      - ./server:/usr/app
+      - ./app:/usr/next
     networks:
       - docker_net
     depends_on:
       - postgres
-    env_file:
-      - ./.env.development
-    entrypoint: /usr/app/entrypoint-dev.sh
+    entrypoint: /usr/next/entrypoint-dev.sh
   postgres:
     image: postgres:latest
-    hostname: postgres # you can use postgres.docker_net as the hostname internally
+    # you can use postgres.docker_net as the hostname internally
+    hostname: postgres
     networks:
       - docker_net
     restart: unless-stopped
@@ -32,21 +29,17 @@ services:
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: docker_crud
     env_file:
-      - ./.env.development
+      - ./app/.env
     ports:
       - 5432:5432
-  pg-admin:
-    image: dpage/pgadmin4:6
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@email.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
-      - PGADMIN_LISTEN_PORT=5050
-    networks:
-      - docker_net
+  prisma-studio:
+    container_name: prisma-studio
+    image: timothyjmiller/prisma-studio:latest
+    restart: unless-stopped
+    env_file:
+      - ./app/.env
     ports:
-      - "5050:5050"
-    volumes:
-      - pg-admin-data:/var/lib/pgadmin
+      - 5555:5555
 
 networks:
   docker_net:
